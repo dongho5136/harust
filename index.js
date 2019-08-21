@@ -21,28 +21,28 @@ const server = http.createServer((request, response) => {
 
 	if(request.url == '/Get_Meta_Tag'){
 
-      // var body = '';
-      // request.on('data', function(data){
-      //     body = body + data;
-      // });
-      // request.on('end', function(){
-      //     var post = qs.parse(body);
-      //     console.log(post);
-
-      //     var URL = post.URL;
-
-      //     Get_Meta_Tag(encodeURI(URL), function(err, data){ 
-      //         response.writeHead(200, {'Content-Type':'text/plain; charset=utf-8'});
-      //         response.end(JSON.stringify(data));
-      //     });
-      // });
-      
-      var URL = "https://smartstore.naver.com/rekoi?NaPm=ct%3Djzks11mq%7Cci%3Dcheckout%7Ctr%3Dds%7Ctrx%3D%7Chk%3Dd03b156022e9f7f193e23ca683c16a775c10e2b9";
-
-      Get_Meta_Tag(encodeURI(URL), function(err, data){ 
-          response.writeHead(200, {'Content-Type':'text/plain; charset=utf-8'});
-          response.end(JSON.stringify(data));
+      var body = '';
+      request.on('data', function(data){
+          body = body + data;
       });
+      request.on('end', function(){
+          var post = qs.parse(body);
+          console.log(post);
+
+          var URL = post.URL;
+
+          Get_Meta_Tag(encodeURI(URL), function(err, data){ 
+              response.writeHead(200, {'Content-Type':'text/plain; charset=utf-8'});
+              response.end(JSON.stringify(data));
+          });
+      });
+      
+      // var URL = "https://smartstore.naver.com/rekoi?NaPm=ct%3Djzks11mq%7Cci%3Dcheckout%7Ctr%3Dds%7Ctrx%3D%7Chk%3Dd03b156022e9f7f193e23ca683c16a775c10e2b9";
+
+      // Get_Meta_Tag(encodeURI(URL), function(err, data){ 
+      //     response.writeHead(200, {'Content-Type':'text/plain; charset=utf-8'});
+      //     response.end(JSON.stringify(data));
+      // });
 
     
     }else{
