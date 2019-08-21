@@ -7,5 +7,10 @@
     "author": "Microsoft",
     "scripts": {
         "start": "node index.js"
+    },
+    "dependencies": {
+        "cheerio-httpcli": "^0.7.4",
+        "puppeteer": "^1.19.0",
+        "request": "^2.88.0"
     }
 }
