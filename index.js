@@ -37,7 +37,7 @@ const server = http.createServer((request, response) => {
           });
       });
       
-      // var URL = "https://smartstore.naver.com/rekoi?NaPm=ct%3Djzks11mq%7Cci%3Dcheckout%7Ctr%3Dds%7Ctrx%3D%7Chk%3Dd03b156022e9f7f193e23ca683c16a775c10e2b9";
+      // var URL = "https://www.brandi.co.kr/shop/themonin/products/10114845";
 
       // Get_Meta_Tag(encodeURI(URL), function(err, data){ 
       //     response.writeHead(200, {'Content-Type':'text/plain; charset=utf-8'});
@@ -45,6 +45,13 @@ const server = http.createServer((request, response) => {
       // });
 
     
+    }else if (request.url == '/test'){
+    	var URL = "https://www.brandi.co.kr/shop/themonin/products/10114845";
+
+      Get_Meta_Tag(encodeURI(URL), function(err, data){ 
+          response.writeHead(200, {'Content-Type':'text/plain; charset=utf-8'});
+          response.end(JSON.stringify(data));
+      });
     }else{
     	response.writeHead(200, {"Content-Type": "text/plain"});
     	response.end("Done!!");
@@ -90,114 +97,114 @@ async function Get_Meta_Tag(URL, callback){
 
     if(host_name.includes("smartstore.naver.com")){
 
-      // if(host_name.includes("product")){
+      if(URL.includes("products")){
+      	
+        thumbnail = $(".img_va img").attr('src');
+        title = $(".prd_name strong").text();
 
-      //   thumbnail = $(".img_va img").attr('src');
-      //   title = $(".prd_name strong").text();
+        if($(".original span:nth-child(2)").length == 0){
+          price = $(".info_cost span").text();
+          sale_price = "";
+        }else{
+          price = $(".original span:nth-child(2)").text();
+          sale_price = $(".original").next().text();
+        }
 
-      //   if($(".original span:nth-child(2)").length == 0){
-      //     price = $(".info_cost span").text();
-      //     sale_price = "";
-      //   }else{
-      //     price = $(".original span:nth-child(2)").text();
-      //     sale_price = $(".original").next().text();
-      //   }
+        var url_arr = URL.split("/");
+        for(var i = 0; i < url_arr.length; i++){
+          if(url_arr[i].includes("smartstore.naver.com")){
+            site_url = "smartstore.naver.com" + "/" + url_arr[i+1];
 
-      //   var url_arr = URL.split("/");
-      //   for(var i = 0; i < url_arr.length; i++){
-      //     if(url_arr[i].includes("smartstore.naver.com")){
-      //       site_url = "smartstore.naver.com" + "/" + url_arr[i+1];
+            Get_SmartStore_Meta_Tag(encodeURI(protocol + "//" + site_url), site_url, function(err, data, date2, data3){ 
+              site_name = data;
+              site_icon = date2;
+              site_description = data3;
 
-      //       Get_SmartStore_Meta_Tag(encodeURI(protocol + "//" + site_url), site_url, function(err, data, date2, data3){ 
-      //         site_name = data;
-      //         site_icon = date2;
-      //         site_description = data3;
-
-      //         var Response_Object = new Object();
-      //         Response_Object.Response = "Success";
-      //           Response_Object.host_name = site_url;
-      //           Response_Object.site_name = site_name.trim();
-      //           Response_Object.site_icon = site_icon;
-      //           Response_Object.site_description = site_description.trim();
-      //           Response_Object.thumbnail = thumbnail;
-      //           Response_Object.title = title.trim();
-      //           Response_Object.price = price.trim();
-      //           Response_Object.sale_price = sale_price.trim();
+              var Response_Object = new Object();
+              Response_Object.Response = "Success";
+                Response_Object.host_name = site_url;
+                Response_Object.site_name = site_name.trim();
+                Response_Object.site_icon = site_icon;
+                Response_Object.site_description = site_description.trim();
+                Response_Object.thumbnail = thumbnail;
+                Response_Object.title = title.trim();
+                Response_Object.price = price.trim();
+                Response_Object.sale_price = sale_price.trim();
                   
-      //           return callback(null, Response_Object);
-      //       });
+                return callback(null, Response_Object);
+            });
 
-      //     }
-      //   }
+          }
+        }
 
+      }else{
+
+        var url_arr = URL.split("/");
+        for(var i = 0; i < url_arr.length; i++){
+          if(url_arr[i].includes("smartstore.naver.com")){
+            site_url = "smartstore.naver.com" + "/" + url_arr[i+1];
+
+            Get_SmartStore_Meta_Tag(encodeURI(protocol + "//" + site_url), site_url, function(err, data, date2, data3){ 
+              site_name = data;
+              site_icon = date2;
+              site_description = data3;
+
+              var Response_Object = new Object();
+              Response_Object.Response = "Success";
+                Response_Object.host_name = site_url;
+                Response_Object.site_name = site_name.trim();
+                Response_Object.site_icon = site_icon;
+                Response_Object.site_description = site_description.trim();
+                Response_Object.thumbnail = site_icon;
+                Response_Object.title = site_name.trim();
+                Response_Object.price = "";
+                Response_Object.sale_price = "";
+                  
+                return callback(null, Response_Object);
+            });
+
+          }
+        }
+
+      }
+
+      // thumbnail = $(".img_va img").attr('src');
+      // title = $(".prd_name strong").text();
+
+      // if($(".original span:nth-child(2)").length == 0){
+      //   price = $(".info_cost span").text();
+      //   sale_price = "";
       // }else{
-
-      //   var url_arr = URL.split("/");
-      //   for(var i = 0; i < url_arr.length; i++){
-      //     if(url_arr[i].includes("smartstore.naver.com")){
-      //       site_url = "smartstore.naver.com" + "/" + url_arr[i+1];
-
-      //       Get_SmartStore_Meta_Tag(encodeURI(protocol + "//" + site_url), site_url, function(err, data, date2, data3){ 
-      //         site_name = data;
-      //         site_icon = date2;
-      //         site_description = data3;
-
-      //         var Response_Object = new Object();
-      //         Response_Object.Response = "Success";
-      //           Response_Object.host_name = site_url;
-      //           Response_Object.site_name = site_name.trim();
-      //           Response_Object.site_icon = site_icon;
-      //           Response_Object.site_description = site_description.trim();
-      //           Response_Object.thumbnail = site_icon;
-      //           Response_Object.title = site_name.trim();
-      //           Response_Object.price = "";
-      //           Response_Object.sale_price = "";
-                  
-      //           return callback(null, Response_Object);
-      //       });
-
-      //     }
-      //   }
-
+      //   price = $(".original span:nth-child(2)").text();
+      //   sale_price = $(".original").next().text();
       // }
 
-      thumbnail = $(".img_va img").attr('src');
-      title = $(".prd_name strong").text();
+      // var url_arr = URL.split("/");
+      // for(var i = 0; i < url_arr.length; i++){
+      //   if(url_arr[i].includes("smartstore.naver.com")){
+      //     site_url = "smartstore.naver.com" + "/" + url_arr[i+1];
 
-      if($(".original span:nth-child(2)").length == 0){
-        price = $(".info_cost span").text();
-        sale_price = "";
-      }else{
-        price = $(".original span:nth-child(2)").text();
-        sale_price = $(".original").next().text();
-      }
+      //     Get_SmartStore_Meta_Tag(encodeURI(protocol + "//" + site_url), site_url, function(err, data, date2, data3){ 
+      //       site_name = data;
+      //       site_icon = date2;
+      //       site_description = data3;
 
-      var url_arr = URL.split("/");
-      for(var i = 0; i < url_arr.length; i++){
-        if(url_arr[i].includes("smartstore.naver.com")){
-          site_url = "smartstore.naver.com" + "/" + url_arr[i+1];
-
-          Get_SmartStore_Meta_Tag(encodeURI(protocol + "//" + site_url), site_url, function(err, data, date2, data3){ 
-            site_name = data;
-            site_icon = date2;
-            site_description = data3;
-
-            var Response_Object = new Object();
-            Response_Object.Response = "Success";
-              Response_Object.host_name = site_url;
-              Response_Object.site_name = site_name.trim();
-              Response_Object.site_icon = site_icon;
-              Response_Object.site_description = site_description.trim();
-              Response_Object.thumbnail = thumbnail;
-              Response_Object.title = title.trim();
-              Response_Object.price = price.trim();
-              Response_Object.sale_price = sale_price.trim();
+      //       var Response_Object = new Object();
+      //       Response_Object.Response = "Success";
+      //         Response_Object.host_name = site_url;
+      //         Response_Object.site_name = site_name.trim();
+      //         Response_Object.site_icon = site_icon;
+      //         Response_Object.site_description = site_description.trim();
+      //         Response_Object.thumbnail = thumbnail;
+      //         Response_Object.title = title.trim();
+      //         Response_Object.price = price.trim();
+      //         Response_Object.sale_price = sale_price.trim();
                 
-              return callback(null, Response_Object);
-          });
+      //         return callback(null, Response_Object);
+      //     });
 
-        }
-      }
+      //   }
+      // }
 
     }else if(host_name.includes("brandi.co.kr")){
 
@@ -346,7 +353,7 @@ async function Get_Meta_Tag(URL, callback){
       // 홈페이지 URL
       if($( 'meta[property="og:url"]' ).attr( 'content' ) != undefined){
 
-        if($( 'meta[property="og:url"]' ).length == 2){ // 비정상 http://www.ddaygirl.com/product/detail.html?product_no=4368&cate_no=1&display_group=3 이런데 드가보면 메타태그가 두개임 씨발.
+        if($( 'meta[property="og:url"]' ).length > 1){ // 비정상 http://www.ddaygirl.com/product/detail.html?product_no=4368&cate_no=1&display_group=3 이런데 드가보면 메타태그가 두개임 씨발.
           site_url = $( 'meta[property="og:url"]' ).eq(0).attr( 'content' );
         }else{
           site_url = $( 'meta[property="og:url"]' ).attr( 'content' ); // 얘가 정상
@@ -359,7 +366,7 @@ async function Get_Meta_Tag(URL, callback){
       // 제품 썸네일 이미지
       if($( 'meta[property="og:image"]' ).attr( 'content' ) != undefined){
 
-        if($( 'meta[property="og:image"]' ).length == 2){ // 비정상 http://www.ddaygirl.com/product/detail.html?product_no=4368&cate_no=1&display_group=3 이런데 드가보면 메타태그가 두개임 씨발.
+        if($( 'meta[property="og:image"]' ).length > 1){ // 비정상 http://www.ddaygirl.com/product/detail.html?product_no=4368&cate_no=1&display_group=3 이런데 드가보면 메타태그가 두개임 씨발.
           thumbnail = $( 'meta[property="og:image"]' ).eq(1).attr( 'content' );
         }else{
           thumbnail = $( 'meta[property="og:image"]' ).attr( 'content' ); // 얘가 정상
@@ -372,7 +379,7 @@ async function Get_Meta_Tag(URL, callback){
       // 제품명
       if($( 'meta[property="og:title"]' ).attr( 'content' ) != undefined){
 
-        if($( 'meta[property="og:title"]' ).length == 2){ // 비정상 http://www.ddaygirl.com/product/detail.html?product_no=4368&cate_no=1&display_group=3 이런데 드가보면 메타태그가 두개임 씨발.
+        if($( 'meta[property="og:title"]' ).length > 1){ // 비정상 http://www.ddaygirl.com/product/detail.html?product_no=4368&cate_no=1&display_group=3 이런데 드가보면 메타태그가 두개임 씨발.
           title = $( 'meta[property="og:title"]' ).eq(1).attr( 'content' );
         }else{
           title = $( 'meta[property="og:title"]' ).attr( 'content' ); // 얘가 정상
